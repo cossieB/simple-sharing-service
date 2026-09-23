@@ -1,7 +1,7 @@
 variable "project_name" {
   description = "Name prefix used for all resources"
   type        = string
-  default     = "simple-sharing-service"
+  default     = "3s"
 }
 
 variable "aws_region" {

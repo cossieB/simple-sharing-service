@@ -88,12 +88,20 @@ resource "aws_dynamodb_table" "files" {
   }
 
   # Lets the lambda query "all files uploaded by user X, newest first"
-  global_secondary_index {
-    name            = "userId-createdAt-index"
-    hash_key        = "userId"
-    range_key       = "createdAt"
-    projection_type = "ALL"
+global_secondary_index {
+  name            = "userId-createdAt-index"
+  projection_type = "ALL"
+
+  key_schema {
+    attribute_name = "userId"
+    key_type       = "HASH"
   }
+
+  key_schema {
+    attribute_name = "createdAt"
+    key_type       = "RANGE"
+  }
+}
 
   point_in_time_recovery {
     enabled = true
