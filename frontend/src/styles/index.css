@@ -168,7 +168,7 @@
         }
     }
 
-    .button {
+    button {
         background-color: var(--char-800);
         border: 1px solid var(--char-600);
         border-radius: 0.5rem;
