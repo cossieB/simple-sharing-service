@@ -1,0 +1,209 @@
+@layer reset, base, layouts, components, utilities;
+
+@import url("reset.css") layer(reset);
+@import url("inputs.css") layer(base);
+@import url("utilities.css") layer(utilities);
+
+@layer base {
+    @property --volt-h {
+        syntax: '<number>';
+        inherits: true;
+        initial-value: 145;
+    }
+
+    @property --volt-c {
+        syntax: '<number>';
+        inherits: true;
+        initial-value: 0.24;
+    }
+
+    :root {
+        color-scheme: dark;
+
+        --volt-h: 145;
+        --volt-c: 0.24;
+
+        --char-950: oklch(11% 0.012 var(--volt-h));
+        --char-900: oklch(15% 0.014 var(--volt-h));
+        --char-800: oklch(19% 0.016 var(--volt-h));
+        --char-700: oklch(25% 0.018 var(--volt-h));
+        --char-600: oklch(32% 0.02 var(--volt-h));
+
+        --smoke-400: oklch(58% 0.02 var(--volt-h));
+        --smoke-300: oklch(70% 0.018 var(--volt-h));
+        --paper-100: oklch(88% 0.012 var(--volt-h));
+        --paper-50: oklch(96% 0.008 var(--volt-h));
+
+        --volt-500: #61dc6b;
+        --volt-500: oklch(80% var(--volt-c) var(--volt-h));
+        --volt-300: oklch(from var(--volt-500) calc(l + 0.16) calc(c * 0.9) h);
+        --volt-400: oklch(from var(--volt-500) calc(l + 0.07) c h);
+        --volt-600: oklch(from var(--volt-500) calc(l - 0.08) calc(c * 1.05) h);
+        --volt-700: oklch(from var(--volt-500) calc(l - 0.18) calc(c * 0.9) h);
+
+        --volt-fill-hover: oklch(from var(--volt-500) calc(l + 0.05) c h);
+        --volt-fill-active: oklch(from var(--volt-500) calc(l - 0.07) c h);
+        --volt-tint: color-mix(in oklch, var(--volt-500) 14%, var(--char-900));
+        --volt-tint-strong: color-mix(in oklch, var(--volt-500) 26%, var(--char-900));
+        --volt-border: color-mix(in oklch, var(--volt-500) 45%, var(--char-700));
+
+        --radius: 10px;
+        --bounce: linear(0, 0.029 0.8%, 0.13 1.8%, 0.908 7.2%, 1.051 9.1%, 1.112 11.2%, 1.116 12.2%, 1.106 13.4%, 1.007 19.5%, 0.987 23.1%, 1.001 35%, 1);
+        --font-display: 'Space Grotesk', system-ui, sans-serif;
+        --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+        --danger-500: oklch(62% 0.21 25);
+        --danger-300: oklch(from var(--danger-500) calc(l + 0.20) calc(c * 0.85) h);
+        --danger-400: oklch(from var(--danger-500) calc(l + 0.08) c h);
+        --danger-600: oklch(from var(--danger-500) calc(l - 0.07) calc(c * 1.05) h);
+        --danger-700: oklch(from var(--danger-500) calc(l - 0.20) calc(c * 0.85) h);
+
+        --danger-tint: color-mix(in oklch, var(--danger-500) 14%, var(--char-900));
+        --danger-tint-strong: color-mix(in oklch, var(--danger-500) 26%, var(--char-900));
+        --danger-border: color-mix(in oklch, var(--danger-500) 45%, var(--char-700));
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        background: var(--char-950);
+        color: var(--paper-50);
+        font-family: var(--font-body);
+        line-height: 1.5;
+        transition: background 0.2s ease;
+    }
+
+    input {
+        border: none;
+        background: none;
+    }
+
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 100%;
+        height: 4px;
+        border-radius: 2px;
+        background: var(--volt-tint);
+        accent-color: var(--volt-500);
+        cursor: pointer;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: var(--volt-500);
+        border: 2px solid var(--volt-500);
+        cursor: pointer;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            transition: none !important;
+        }
+
+        ::view-transition-group(*),
+        ::view-transition-old(*),
+        ::view-transition-new(*) {
+            animation: none !important;
+        }
+    }
+
+
+    @keyframes spin {
+        from {
+            rotate: 0deg;
+        }
+
+        to {
+            rotate: 360deg;
+        }
+    }
+
+    .splash-screen {
+        height: 100vh;
+        width: 100%;
+
+        img {
+            animation: spin 5s linear infinite;
+        }
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollable {
+        scrollbar-gutter: stable;
+        scrollbar-width: auto;
+        scrollbar-color: transparent transparent;
+        overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 4px;
+        }
+
+        &:hover {
+            scrollbar-color: var(--volt-300) transparent;
+
+            &::-webkit-scrollbar-thumb {
+                background-color: var(--volt-300);
+            }
+        }
+    }
+
+    .button {
+        background-color: var(--char-800);
+        border: 1px solid var(--char-600);
+        border-radius: 0.5rem;
+        float: inline-end;
+        padding: 0.5rem;
+        margin-right: 0.25rem;
+
+        &:hover {
+            background-color: var(--char-700);
+        }
+
+        &:disabled {
+            background-color: var(--char-600);
+            cursor: not-allowed
+        }
+    }
+
+    html {
+        scrollbar-width: auto;
+        scrollbar-color: var(--volt-300) transparent;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: var(--volt-300);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.6);
+    }
+}
+
+

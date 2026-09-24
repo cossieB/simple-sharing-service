@@ -1,0 +1,98 @@
+.pt-5 {
+    padding-top: 1.25rem;
+}
+
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+.fillUp {
+    width: 100%;
+    height: 100%;
+}
+
+.flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.65rem;
+    cursor: pointer;
+    background-color: var(--char-800);
+    color: var(--paper-100);
+    border: 1px solid var(--char-600);
+
+    &:hover {
+        border-color: var(--char-600);
+        background-color: var(--char-700);
+    }
+}
+
+.danger {
+    color: var(--danger-500);
+}
+
+.menuPopoverAnimation {
+    opacity: 0;
+    transform: translateY(5rem);
+    z-index: 4;
+    transition:
+        opacity 200ms,
+        transform 800ms var(--bounce),
+        display 200ms allow-discrete,
+        overlay 200ms allow-discrete;
+
+    &:popover-open {
+        opacity: 1;
+        transform: translateY(0);
+        
+        @starting-style {
+            opacity: 0;
+            transform: translateY(-5rem);
+        }
+    }
+}
+
+.volt-switch {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    inline-size: 40px;
+    block-size: 24px;
+    border-radius: 999px;
+    background: var(--char-700);
+    border: 1px solid var(--char-600);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        inline-size: 18px;
+        block-size: 18px;
+        border-radius: 50%;
+        background: var(--smoke-300);
+        transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    &:checked {
+        background: var(--volt-500);
+        border-color: var(--volt-500);
+
+        &::before {
+            transform: translateX(16px);
+            background: var(--char-950);
+        }
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--volt-tint);
+    }
+}

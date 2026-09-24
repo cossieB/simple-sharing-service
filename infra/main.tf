@@ -4,7 +4,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.0"
+      version = "~> 6.0"
     }
     archive = {
       source  = "hashicorp/archive"
@@ -88,20 +88,20 @@ resource "aws_dynamodb_table" "files" {
   }
 
   # Lets the lambda query "all files uploaded by user X, newest first"
-global_secondary_index {
-  name            = "userId-createdAt-index"
-  projection_type = "ALL"
+  global_secondary_index {
+    name            = "userId-createdAt-index"
+    projection_type = "ALL"
 
-  key_schema {
-    attribute_name = "userId"
-    key_type       = "HASH"
-  }
+    key_schema {
+      attribute_name = "userId"
+      key_type       = "HASH"
+    }
 
-  key_schema {
-    attribute_name = "createdAt"
-    key_type       = "RANGE"
+    key_schema {
+      attribute_name = "createdAt"
+      key_type       = "RANGE"
+    }
   }
-}
 
   point_in_time_recovery {
     enabled = true
@@ -238,7 +238,7 @@ resource "aws_lambda_function" "api" {
   function_name = "${var.project_name}-api"
   role          = aws_iam_role.lambda_exec.arn
   handler       = var.lambda_handler
-  runtime       = "nodejs20.x"
+  runtime       = "nodejs24.x"
   timeout       = 29
   memory_size   = 256
 
@@ -336,6 +336,7 @@ resource "aws_amplify_app" "frontend" {
   name         = "${var.project_name}-frontend"
   repository   = var.github_repo_url != "" ? var.github_repo_url : null
   access_token = var.github_access_token != "" ? var.github_access_token : null
+
 
   # Monorepo layout: frontend/ lives alongside backend/ and infra/ in the same
   # repo, so Amplify needs an explicit appRoot pointing at the frontend folder.

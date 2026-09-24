@@ -1,0 +1,95 @@
+/* 
+*   Kevin Powell
+*   https://youtu.be/cCAtD_BAHNw 
+*/
+@layer reset {
+
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    user-select: none;
+  }
+
+  :root {
+    interpolate-size: allow-keywords;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    /* Get rid of all font sizes and heights */
+  }
+
+  html {
+    color-scheme: dark;
+    hanging-punctuation: first last;
+    /* Not supported in Chrome */
+  }
+
+  body {
+    min-height: 100vh;
+  }
+
+  /* Media responsive */
+  img,
+  picture,
+  svg,
+  video {
+    display: block;
+    max-width: 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    text-wrap: balance;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  ul,
+  ol {
+    list-style: none;
+  }
+
+  p {
+    max-width: 75ch;
+    text-wrap: pretty;
+    /* Prevents orphans on lines */
+  }
+
+  button {
+    border: none;
+    background: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :has(:target) {
+      scroll-behavior: smooth;
+      scroll-padding-top: 3rem;
+    }
+  }
+
+  table, caption, tbody, tfoot, thead, tr, th, td {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+}

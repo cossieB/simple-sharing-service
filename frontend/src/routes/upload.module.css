@@ -1,0 +1,10 @@
+.uploadContainer {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    >label {
+        width: min(90%, 600px);
+        height: 10rem;
+    }
+}

@@ -1,0 +1,356 @@
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--paper-100);
+    background: var(--char-800);
+    border: 1px solid var(--char-600);
+    border-radius: 8px;
+    padding: 0.65rem 2.4rem 0.65rem 0.85rem;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 14 14'><path d='M2.5 5L7 9.5L11.5 5' stroke='%23A9C9AE' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    scrollbar-color: var(--volt-300) transparent;
+
+    &:hover {
+        border-color: var(--char-600);
+        background-color: var(--char-700);
+    }
+
+    &:focus-visible {
+        outline: none;
+        border-color: var(--volt-500);
+        box-shadow: 0 0 0 3px var(--volt-tint);
+    }
+
+    /* fallback option styling — the browser only honors bg/color here,
+     everything else (padding, radius, hover) is a no-op pre-@supports */
+    option {
+        background: var(--char-800);
+        color: var(--paper-100);
+    }
+
+    /* ---------- enhanced select, only where the new customizable
+     select API is supported ---------- */
+    @supports (appearance: base-select) {
+        appearance: base-select;
+        background-image: none;
+        padding-right: 0.85rem;
+
+        &::picker-icon {
+            color: var(--smoke-300);
+            transition: rotate 0.15s ease, color 0.15s ease;
+        }
+
+        &:open::picker-icon {
+            rotate: 180deg;
+            color: var(--volt-400);
+        }
+
+        &::picker(select) {
+            appearance: base-select;
+            background: var(--char-900);
+            border: 1px solid var(--char-700);
+            border-radius: 10px;
+            padding: 0.35rem;
+            margin-top: 0.4rem;
+            box-shadow: 0 16px 40px oklch(0% 0 0 / 0.55);
+
+            opacity: 0;
+            transform: translateY(-6px) scale(0.98);
+            transition: opacity 0.15s ease, transform 0.15s ease,
+                display 0.15s allow-discrete, overlay 0.15s allow-discrete;
+        }
+
+        &:open::picker(select) {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        @starting-style {
+            &:open::picker(select) {
+                opacity: 0;
+                transform: translateY(-6px) scale(0.98);
+            }
+        }
+
+        option {
+            border-radius: 6px;
+            padding: 0.55rem 0.7rem;
+            margin: 0.1rem 0;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.1s ease;
+
+            &:hover,
+            &:focus-visible {
+                background: var(--volt-tint);
+                color: var(--volt-300);
+            }
+
+            &:checked {
+                background: var(--volt-tint-strong);
+                color: var(--volt-300);
+                font-weight: 600;
+            }
+
+            &::checkmark {
+                order: 1;
+                margin-left: auto;
+                color: var(--volt-500);
+            }
+        }
+    }
+}
+
+
+input[type="checkbox"]:not(.volt-switch),
+input[type="radio"] {
+    /* base tier: works basically everywhere off one property.
+     :not(.volt-switch) keeps this from fighting the switch below —
+     type+attribute selectors otherwise outrank a plain class. */
+    accent-color: var(--volt-500);
+    inline-size: 18px;
+    block-size: 18px;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+/* enhanced tier: fully custom-painted, gated on :has() support —
+   that's the feature this tier actually depends on (see .option-row below) */
+@supports selector(:has(a)) {
+
+    input[type="checkbox"]:not(.volt-switch),
+    input[type="radio"] {
+        appearance: none;
+        -webkit-appearance: none;
+        margin: 0;
+        inline-size: 20px;
+        block-size: 20px;
+        border: 1.5px solid var(--smoke-300);
+        background: var(--char-700);
+        display: inline-grid;
+        place-content: center;
+        transition: background 0.15s ease, border-color 0.15s ease;
+
+        &:checked {
+            background: var(--volt-500);
+            border-color: var(--volt-500);
+        }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 3px var(--volt-tint);
+        }
+    }
+
+    input[type="checkbox"]:not(.volt-switch) {
+        border-radius: 6px;
+
+        &::before {
+            content: "";
+            inline-size: 12px;
+            block-size: 12px;
+            background: var(--char-950);
+            clip-path: polygon(14% 44%, 0 59%, 35% 89%, 100% 18%, 85% 4%, 33% 63%);
+            transform: scale(0);
+            transition: transform 0.14s ease;
+        }
+
+        &:checked::before {
+            transform: scale(1);
+        }
+
+        &:indeterminate {
+            background: var(--volt-tint-strong);
+            border-color: var(--volt-border);
+
+            &::before {
+                clip-path: none;
+                inline-size: 10px;
+                block-size: 2px;
+                background: var(--volt-300);
+                transform: scale(1);
+            }
+        }
+    }
+
+    input[type="radio"] {
+        border-radius: 50%;
+
+        &::before {
+            content: "";
+            inline-size: 8px;
+            block-size: 8px;
+            border-radius: 50%;
+            background: var(--char-950);
+            transform: scale(0);
+            transition: transform 0.14s ease;
+        }
+
+        &:checked::before {
+            transform: scale(1);
+        }
+    }
+
+    /* the row reacts to its own input — no JS class toggling */
+    .option-row:has(:checked),
+    .option-row:has(:indeterminate) {
+        background: var(--volt-tint);
+        border-color: var(--volt-border);
+
+        & .option-label {
+            color: var(--volt-300);
+        }
+    }
+}
+
+
+/* ---------- switch ---------- */
+
+.volt-switch {
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    inline-size: 40px;
+    block-size: 24px;
+    border-radius: 999px;
+    background: var(--char-700);
+    border: 1px solid var(--char-600);
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    &::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        inline-size: 18px;
+        block-size: 18px;
+        border-radius: 50%;
+        background: var(--smoke-300);
+        transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    &:checked {
+        background: var(--volt-500);
+        border-color: var(--volt-500);
+
+        &::before {
+            transform: translateX(16px);
+            background: var(--char-950);
+        }
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--volt-tint);
+    }
+}
+
+
+input[type="text"],
+textarea {
+    font: inherit;
+    font-size: 0.9rem;
+    color: var(--paper-100);
+    background: var(--char-800);
+    border: 1px solid var(--char-600);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+    &::placeholder {
+        color: var(--smoke-400);
+    }
+
+    &:hover {
+        border-color: var(--char-600);
+        background: var(--char-700);
+    }
+
+    &:focus-visible {
+        outline: none;
+        border-color: var(--volt-500);
+        box-shadow: 0 0 0 3px var(--volt-tint);
+    }
+}
+
+textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+
+    /* field-sizing: content — Chrome 123+. Lets a textarea grow with
+     its content instead of scrolling, with no ResizeObserver JS. */
+    @supports (field-sizing: content) {
+        &.autosize {
+            field-sizing: content;
+            resize: none;
+            min-height: unset;
+            max-height: 260px;
+        }
+    }
+}
+
+/* ---------- file drop zone ---------- */
+.file-drop {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem;
+    border: 1.5px dashed var(--char-600);
+    border-radius: 10px;
+    background: var(--char-800);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    height: 100%;
+
+    input[type="file"] {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    &:hover,
+    &.dragover {
+        border-color: var(--volt-500);
+        background: var(--volt-tint);
+    }
+
+    &.invalid {
+        border-color: var(--danger-tint);
+        background: var(--danger-600);
+    }
+
+    .file-title {
+        font-size: 0.88rem;
+        color: var(--paper-100);
+    }
+
+    .file-hint {
+        font-size: 0.76rem;
+        color: var(--smoke-400);
+    }
+
+    .file-name {
+        font-family: var(--font-mono);
+        font-size: 0.76rem;
+        color: var(--volt-300);
+    }
+
+    img {
+        height: 100%;
+    }
+}
