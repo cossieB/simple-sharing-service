@@ -95,7 +95,7 @@ export function UploadRoute() {
                 <span className="file-hint">Drop file here (max 16MB)</span>
             </label>
             <button
-                // disabled={!file || isUploading}
+                disabled={!file || isUploading}
                 onClick={handleSubmit}
             >
                 Upload

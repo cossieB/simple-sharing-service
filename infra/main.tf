@@ -276,6 +276,7 @@ resource "aws_apigatewayv2_api" "this" {
     allow_origins = var.allowed_origins
     allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
     allow_headers = ["*"]
+    max_age = 600
   }
 }
 
@@ -315,6 +316,20 @@ resource "aws_apigatewayv2_route" "catchall" {
   target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
   authorization_type = "JWT"
   authorizer_id      = aws_apigatewayv2_authorizer.cognito.id
+}
+
+resource "aws_apigatewayv2_route" "options_root" {
+  api_id             = aws_apigatewayv2_api.this.id
+  route_key          = "OPTIONS /"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "NONE"
+}
+
+resource "aws_apigatewayv2_route" "options_catchall" {
+  api_id             = aws_apigatewayv2_api.this.id
+  route_key          = "OPTIONS /{proxy+}"
+  target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
+  authorization_type = "NONE"
 }
 
 resource "aws_apigatewayv2_stage" "default" {
