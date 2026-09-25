@@ -2,6 +2,8 @@ import { useState, type DragEvent } from "react"
 import styles from "./upload.module.css"
 import { useAuthenticator } from "@aws-amplify/ui-react";
 import { fetchAuthSession } from "@aws-amplify/auth";
+import { API_URL } from "../env";
+import { useNavigate } from "react-router";
 
 type DragState = "idle" | "dragover" | "invalid";
 
@@ -10,6 +12,7 @@ export function UploadRoute() {
     const [file, setFile] = useState<File>()
     const [isUploading, setIsUploading] = useState(false);
     const auth = useAuthenticator()
+    const navigate = useNavigate()
 
     async function handleSubmit() {
         if (!file) return;
@@ -21,7 +24,7 @@ export function UploadRoute() {
             auth.signOut()
         }
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL}/files/upload-url`, {
+            const res = await fetch(`${API_URL}/files/upload-url`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -45,6 +48,10 @@ export function UploadRoute() {
                     "Content-Type": file.type,
                 },
             })
+            await fetch(`${API_URL}/${data.id}/complete`, {
+                method: "POST"
+            })
+            navigate(`/files/${data.id}`)
         }
         catch (error) {
             console.error(error)

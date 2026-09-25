@@ -275,7 +275,7 @@ resource "aws_apigatewayv2_api" "this" {
   cors_configuration {
     allow_origins = var.allowed_origins
     allow_methods = ["GET", "POST", "PUT", "DELETE", "OPTIONS"]
-    allow_headers = ["*"]
+    allow_headers = ["Authorization", "*"]
     max_age = 600
   }
 }
@@ -330,6 +330,12 @@ resource "aws_apigatewayv2_route" "options_catchall" {
   route_key          = "OPTIONS /{proxy+}"
   target             = "integrations/${aws_apigatewayv2_integration.lambda.id}"
   authorization_type = "NONE"
+}
+
+resource "aws_apigatewayv2_route" "health" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "GET /health"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda.id}"
 }
 
 resource "aws_apigatewayv2_stage" "default" {

@@ -10,10 +10,11 @@ import "@aws-amplify/ui-react/styles.css";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import { UploadRoute } from './routes/upload.tsx'
+import { FilesList } from './routes/files.tsx'
 
 const router = createBrowserRouter([{
     path: "/",
-    element: <div>Hello World</div>,
+    element: <FilesList />,
 }, {
     path: "/create",
     element: <UploadRoute />
@@ -33,7 +34,7 @@ Amplify.configure({
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <Authenticator>
-            <RouterProvider router={router} />
+            {({user}): any => user && <RouterProvider router={router} />}
         </Authenticator>
     </StrictMode>,
 )
