@@ -1,0 +1,53 @@
+.holdButton {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    isolation: isolate;
+    background-color: var(--char-800);
+    color: var(--danger-400);
+    border: 1px solid var(--char-600);
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    touch-action: none;
+    transition: border-color 0.15s ease, color 0.15s ease;
+
+    &:hover:not(:disabled) {
+        border-color: var(--danger-border);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--danger-tint);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        color: var(--smoke-400);
+    }
+}
+
+.fill {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: var(--danger-tint-strong);
+    transition-property: width;
+    transition-timing-function: linear;
+    pointer-events: none;
+}
+
+.label {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    white-space: nowrap;
+}

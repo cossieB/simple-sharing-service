@@ -1,0 +1,119 @@
+.listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    background: var(--char-800);
+    border: 1px solid var(--char-600);
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease, background 0.15s ease;
+
+    &:hover {
+        border-color: var(--volt-border);
+        background: var(--char-700);
+    }
+}
+
+.fileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.fileName {
+    font-size: 0.92rem;
+    color: var(--paper-100);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fileMeta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.76rem;
+    color: var(--smoke-400);
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+}
+
+.badgeUploaded {
+    background: var(--volt-tint);
+    color: var(--volt-300);
+    border: 1px solid var(--volt-border);
+}
+
+.badgePending {
+    background: var(--char-700);
+    color: var(--smoke-300);
+    border: 1px solid var(--char-600);
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.downloadButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: var(--char-800);
+    color: var(--paper-100);
+    border: 1px solid var(--char-600);
+    border-radius: 8px;
+    padding: 0.45rem 0.75rem;
+    font: inherit;
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+
+    &:hover:not(:disabled) {
+        border-color: var(--volt-border);
+        background-color: var(--volt-tint);
+        color: var(--volt-300);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px var(--volt-tint);
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        color: var(--smoke-400);
+    }
+}
+
+.spinner {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--char-600);
+    border-top-color: var(--volt-500);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+.errorText {
+    font-size: 0.74rem;
+    color: var(--danger-400);
+    max-width: 16rem;
+    text-align: right;
+    overflow-wrap: break-word;
+}

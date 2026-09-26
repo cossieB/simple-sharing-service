@@ -1,13 +1,7 @@
-import { useAuthenticator } from '@aws-amplify/ui-react'
+import { FilesList } from "./routes/files";
 
 function App() {
-  const auth = useAuthenticator()
-
-  return (
-    <button >
-      Sign In
-    </button>
-  )
+  return <FilesList />;
 }
 
-export default App
+export default App;

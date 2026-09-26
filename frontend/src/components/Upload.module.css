@@ -1,0 +1,43 @@
+.uploadContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.uploadContainer > label {
+  width: 100%;
+  min-height: 11rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.uploadButton {
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  background: var(--volt-500);
+  color: var(--char-950);
+  border: 1px solid var(--volt-500);
+  font-weight: 600;
+}
+
+.uploadButton:hover:not(:disabled) {
+  background: var(--volt-fill-hover);
+}
+
+.uploadButton:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.error {
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--danger-border);
+  border-radius: 8px;
+  background: var(--danger-tint);
+  color: var(--danger-300);
+  font-size: 0.85rem;
+}
