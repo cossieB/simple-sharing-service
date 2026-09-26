@@ -6,6 +6,12 @@ import styles from "./FileRow.module.css";
 
 type DownloadState = {
     isLoading: boolean;
+    url?: string;
+    error?: string;
+};
+
+type ShareState = {
+    isLoading: boolean;
     error?: string;
 };
 
@@ -16,22 +22,59 @@ type FileRowProps = {
 
 export function FileRow({ file, onDeleted }: FileRowProps) {
     const [downloadState, setDownloadState] = useState<DownloadState>({ isLoading: false });
+    const [shareState, setShareState] = useState<ShareState>({ isLoading: false });
     const [deleteError, setDeleteError] = useState<string | undefined>();
 
     async function handleDownload() {
-        setDownloadState({ isLoading: true, error: undefined });
+        setDownloadState({ isLoading: true });
+        setShareState({ isLoading: false });
 
         try {
             const result = await fetchDownloadUrl(file.id);
 
             if (result.ok) {
-                setDownloadState({ isLoading: false });
-                window.open(result.data.downloadUrl, "_blank", "noopener,noreferrer");
-            } else {
+                setDownloadState({ isLoading: false, url: result.data.downloadUrl });
+            }
+            else {
                 setDownloadState({ isLoading: false, error: result.error });
             }
-        } catch (error: any) {
-            setDownloadState({ isLoading: false, error: error.message || "Failed to get download link" });
+        } catch (error) {
+            setDownloadState({
+                isLoading: false,
+                error: error instanceof Error ? error.message : "Failed to get download link",
+            });
+        }
+    }
+
+    async function handleShare() {
+        if (!downloadState.url || !navigator.share) {
+            setShareState({
+                isLoading: false,
+                error: "Sharing is not supported by this browser.",
+            });
+            return;
+        }
+
+        setShareState({ isLoading: true });
+
+        try {
+            await navigator.share({
+                title: file.fileName,
+                text: `${file.fileName} — download link expires in 1 hour.`,
+                url: downloadState.url,
+            });
+            setShareState({ isLoading: false });
+        } catch (error) {
+            // Closing the native share sheet is not an error.
+            if (error instanceof DOMException && error.name === "AbortError") {
+                setShareState({ isLoading: false });
+                return;
+            }
+
+            setShareState({
+                isLoading: false,
+                error: error instanceof Error ? error.message : "Failed to share the link",
+            });
         }
     }
 
@@ -43,13 +86,16 @@ export function FileRow({ file, onDeleted }: FileRowProps) {
 
             if (result.ok) {
                 onDeleted(file.id);
-            } else {
+            } 
+            else {
                 setDeleteError(result.error);
             }
-        } catch (error: any) {
-            setDeleteError(error.message || "Failed to delete file");
+        } catch (error) {
+            setDeleteError(error instanceof Error ? error.message : "Failed to delete file");
         }
     }
+
+    const actionError = downloadState.error ?? shareState.error ?? deleteError;
 
     return (
         <li className={styles.listItem}>
@@ -58,7 +104,7 @@ export function FileRow({ file, onDeleted }: FileRowProps) {
                 <div className={styles.fileMeta}>
                     <span
                         className={
-                            file.status === 'uploaded'
+                            file.status === "uploaded"
                                 ? `${styles.badge} ${styles.badgeUploaded}`
                                 : `${styles.badge} ${styles.badgePending}`
                         }
@@ -70,24 +116,36 @@ export function FileRow({ file, onDeleted }: FileRowProps) {
             </div>
 
             <div className={styles.actions}>
-                {(downloadState.error || deleteError) && (
-                    <span className={styles.errorText}>{downloadState.error ?? deleteError}</span>
+                {actionError && <span className={styles.errorText}>{actionError}</span>}
+
+                {downloadState.url && (
+                    <div className={styles.linkInfo}>
+                        <span className={styles.expiryText}>Download link expires in 1 hour.</span>
+                        <button
+                            type="button"
+                            className={styles.shareButton}
+                            disabled={shareState.isLoading}
+                            onClick={handleShare}
+                        >
+                            {shareState.isLoading ? "Sharing..." : "Share"}
+                        </button>
+                    </div>
                 )}
 
                 <button
                     type="button"
                     className={styles.downloadButton}
                     disabled={downloadState.isLoading}
-                    onClick={handleDownload}
+                    onClick={downloadState.url ? () => {
+                        window.open(downloadState.url, "_blank", "noopener,noreferrer");
+                    }: handleDownload}
                 >
                     {downloadState.isLoading ? (
                         <>
                             <span className={styles.spinner} />
                             Getting link...
                         </>
-                    ) : (
-                        "Download"
-                    )}
+                    ) : downloadState.url ? "Open" : "Download"}
                 </button>
 
                 <HoldToConfirmButton

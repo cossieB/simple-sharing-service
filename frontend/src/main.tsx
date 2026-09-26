@@ -21,7 +21,7 @@ Amplify.configure({
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <Authenticator>
+    <Authenticator loginMechanisms={["email"]}>
       {({ user }): any => (user ? <App /> : null)}
     </Authenticator>
   </StrictMode>,

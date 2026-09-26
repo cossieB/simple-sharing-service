@@ -76,11 +76,13 @@ app.get("/files", async (c) => {
 // Request a presigned URL to upload a new file, and create its metadata row
 app.post("/files/upload-url", async (c) => {
     const userId = getUserId(c);
-    const body = await c.req.json<{ fileName: string; contentType: string }>();
+    const body = await c.req.json<{ fileName: string; contentType: string, size: unknown }>();
 
-    if (!body.fileName || !body.contentType) {
-        throw new HttpError(400, "fileName and contentType are required");
+    if (!body.fileName || !body.contentType || !body.size) {
+        throw new HttpError(400, "fileName, contentType and size are required");
     }
+    
+    if (typeof body.size !== "number" || body.size > 16 * 1024 * 1024) throw new HttpError(400, "File too big or file size unknown")
 
     const id = randomUUID();
     const s3Key = `${userId}/${id}/${body.fileName}`;
@@ -124,7 +126,7 @@ app.get("/files/:id/download-url", async (c) => {
     const downloadUrl = await getSignedUrl(
         s3,
         new GetObjectCommand({ Bucket: BUCKET_NAME, Key: item.s3Key }),
-        { expiresIn: 300 }
+        { expiresIn: 3600 }
     );
 
     return c.json({ downloadUrl });

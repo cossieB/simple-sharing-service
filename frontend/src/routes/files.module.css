@@ -154,9 +154,6 @@
   border: 1px solid var(--char-600);
   font-size: 1.25rem;
   line-height: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .closeButton:hover {
@@ -180,4 +177,9 @@
   .modal {
     padding: 0.85rem;
   }
+}
+
+.signoutBtn {
+    background-color: var(--danger-500);
+    border: 1px solid var(--danger-border);
 }
